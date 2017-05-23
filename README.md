@@ -16,6 +16,8 @@ For more details check how the references are set in the example project.
 ## Usage
 The SCXML has to be in the static folder of the webapp.
 
+To run the application simply run .basex/bin/basexhttp. 
+
 ## Examples
 [https://github.com/Ahnde/SCXQ/tree/master/example][examples]
 
