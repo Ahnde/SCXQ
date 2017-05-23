@@ -1,0 +1,76 @@
+<xml>
+  <scxml name="Blackjack" initialState="StatePlayersSetup">
+    
+    <state id="StateRoot">
+      <onentry>
+        <var name='playersCount' expr="0" />
+      </onentry>
+
+      <state id="StatePlayersSetup">
+        <transition event="newTurn" target="StateBid"/>
+      </state>
+
+      <state id="StateCurrentTurn">
+        <onentry>
+          <var name='playersCountForThisTurn' expr="playersCount" />
+          <var name='playersLeftToSetBid' expr="playersCount" />
+          <var name='playersLeftToDrawCards' expr="playersCount" />
+        </onentry>
+
+        <state id="StateBid">
+          <onentry>
+          </onentry>
+
+          <transition event="bidWasSet" cond="playersLeftToSetBid &gt; 1" target="StateBid">
+            <assign name='playersLeftToSetBid' expr="playersLeftToSetBid - 1" />
+          </transition>
+          <transition event="bidWasSet" cond="playersLeftToSetBid &lt; 2" target="StateDrawCard"/>
+        </state>
+  
+        <state id="StateCards">
+          <onentry>
+            <send event='showInitialCards' target="external" />
+          </onentry>
+
+          <state id="StateDrawCard">
+            <onentry>
+            </onentry>
+
+            <transition event="stand" cond="playersLeftToDrawCards &gt; 1" target="StateDrawCard">
+              <assign name='playersLeftToDrawCards' expr="playersLeftToDrawCards - 1" />
+            </transition>
+            <transition event="stand" cond="playersLeftToDrawCards &lt; 2" target="StateShowResult"/>
+          </state>
+        </state>
+
+        <state id="StateShowResult">
+          <onentry>
+            <send event='showResult' target="external" />
+          </onentry>
+          <transition event="payOut" target="StatePayOut"/>
+        </state>
+  
+        <state id="StatePayOut">
+          <onentry>
+            <send event='payOut' target="external" />
+          </onentry>
+          <transition event="newTurn" target="StateBid"/>
+        </state>
+      </state>
+
+      <transition event="addPlayer">
+        <assign name='playersCount' expr="playersCount + 1" />
+      </transition>
+      <transition event="removePlayer">
+        <assign name='playersCount' expr="playersCount - 1" />
+      </transition>
+      <transition event="endApp" target="StateFinal"/>
+    </state>
+
+    <state id="StateFinal">
+      <onentry>
+        <send event='end' target="external" />
+      </onentry>
+    </state>
+  </scxml>
+</xml>

@@ -1,0 +1,9 @@
+<?xml version="1.0" standalone="no" ?>
+<hand>	
+	<value>20</value>
+	<cards>
+		<card id="12" value="10">King of Hearts</card>
+		<card id="28" value="3">3 of Clovers</card>
+		<card id="45" value="7">7 of Tiles</card>
+	</cards>
+</hand>
